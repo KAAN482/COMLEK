@@ -6,14 +6,40 @@ from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
 
 # --- SABİTLER ---
-# "Deneme" eklendi
 SQUAD_LIST = ["Bot", "Osman", "Gökmen", "Cankut", "Melo", "Ali", "Kaan", "Raşit", "Hakan", "Tolgahan", "Onur", "Emre", "Muho", "Bedo", "Efe", "Deneme"]
 
-# --- CSS STİLLERİ (GÜNCELLENDİ: Daha Büyük Yazı, Daha Kısa Kutu) ---
+# --- CSS STİLLERİ (MOBİL KOLON DÜZELTMELİ) ---
 def load_css():
     st.markdown("""
     <style>
-        /* Seçilen oyuncu kartı */
+        /* --- MOBİL İÇİN KRİTİK AYAR --- */
+        /* Ekran 640px'den küçükse (Telefonlar) */
+        @media only screen and (max-width: 640px) {
+            /* Tüm kolonları yan yana kalmaya zorla */
+            div[data-testid="column"] {
+                width: auto !important;
+                flex: 1 1 auto !important;
+                min-width: 1px !important; /* Küçülmesine izin ver */
+            }
+
+            /* Mobilde kutu içindeki yazıları iyice küçült sığsın */
+            .selected-player {
+                font-size: 10px !important;
+                min-height: 24px !important;
+                line-height: 22px !important;
+                padding: 0px !important;
+            }
+
+            /* Mobilde Selectbox okunu ve boşluğunu yok et ki isim sığsın */
+            .stSelectbox div[data-baseweb="select"] {
+                padding-right: 0px !important;
+            }
+            .stSelectbox svg {
+                display: none !important; /* Ok işaretini gizle yer açılsın */
+            }
+        }
+
+        /* --- GENEL AYARLAR --- */
         .selected-player {
             background-color: #1e1e1e;
             color: #ffffff;
@@ -35,7 +61,7 @@ def load_css():
         .position-label { display: none; }
         .pitch-container {
             background-color: #2e7d32;
-            padding: 8px;
+            padding: 5px; /* Mobilde yer kazanmak için azaldı */
             border-radius: 10px;
             border: 2px solid white;
         }
@@ -52,9 +78,9 @@ def load_css():
             color: white !important;
         }
         .stSelectbox div[data-baseweb="select"] > div {
-            font-size: 12px;
+            font-size: 11px; /* Genel font küçüldü */
             min-height: 28px;
-            padding: 0px 5px;
+            padding: 0px 2px; /* Yan boşluklar azaldı */
             font-weight: bold;
         }
         .stSelectbox div[data-baseweb="select"] {
