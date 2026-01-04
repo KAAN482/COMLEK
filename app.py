@@ -3,7 +3,7 @@ import utils
 from views import home, squad, voting, stats
 
 # --- AYARLAR ---
-st.set_page_config(page_title="FC Python - Pro Clubs", page_icon="⚽", layout="wide")
+st.set_page_config(page_title="ÇÖMLEKÇİ", page_icon="⚽", layout="wide")
 
 # CSS Yükle
 utils.load_css()
