@@ -11,11 +11,11 @@ def show_home():
         st.subheader("Haftanın Olayı")
         # Kalın ve Büyük Yazı (Markdown)
         st.markdown("""
-        ### **Takım yine son dakikada gol yiyerek herkesi kanser etti. Discord karıştı.**
+        ### **FARUK VE SEYİTHAN KOVULDU**
         """)
 
         # 'use_container_width' parametresini sildik (Otomatik sığar)
-        try: st.image("images/haber1.jpg")
+        try: st.image("images/haber1.png")
         except: st.warning("haber1.jpg yok")
 
     # --- HABER 2 ---
@@ -23,9 +23,9 @@ def show_home():
         st.subheader("Transfer Haberi")
         # Kalın ve Büyük Yazı (Markdown)
         st.markdown("""
-        ### **Melo'nun forvetten kovan kaleye geçmesi gündemde. Bonservisi 1 dürüm.**
+        ### **CANKUT TAKIMA KÜSTÜ MÜ?*
         """)
 
         # 'use_container_width' parametresini sildik
-        try: st.image("images/haber2.jpg")
+        try: st.image("images/haber2.png")
         except: st.warning("haber2.jpg yok")
