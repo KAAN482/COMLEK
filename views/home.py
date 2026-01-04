@@ -11,6 +11,6 @@ def show_home():
         except: st.warning("haber1.jpg yok")
     with col2:
         st.subheader("Transfer Haberi")
-        st.write("Melo'nun forvetten kovan kaleye geçmesi gündemde.")
-        try: st.image("images/haber2.jpg", use_container_width=True)
+        st.write("Cankut takıma küstü mü?")
+        try: st.image("images/haber2.png", use_container_width=True)
         except: st.warning("haber2.jpg yok")
