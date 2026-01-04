@@ -6,59 +6,68 @@ from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
 
 # --- SABİTLER ---
-SQUAD_LIST = ["Bot", "Osman", "Gökmen", "Cankut", "Melo", "Ali", "Kaan", "Raşit", "Hakan", "Tolgahan", "Onur", "Emre", "Muho", "Bedo", "Efe","Deneme"]
+SQUAD_LIST = ["Bot", "Osman", "Gökmen", "Cankut", "Melo", "Ali", "Kaan", "Raşit", "Hakan", "Tolgahan", "Onur", "Emre", "Muho", "Bedo", "Efe"]
 
-# --- CSS STİLLERİ (MOBİL İÇİN KÜÇÜLTÜLDÜ) ---
+# --- CSS STİLLERİ (GÜNCELLENDİ: Geniş ve Kısa) ---
 def load_css():
     st.markdown("""
     <style>
-        /* Seçilen oyuncu kartı - Mobilde daha küçük */
+        /* Seçilen oyuncu kartı */
         .selected-player {
             background-color: #1e1e1e;
             color: #ffffff;
-            padding: 4px; /* Padding azaldı */
-            border-radius: 5px;
+            width: 100% !important; /* Enine tam kapla */
+            padding: 2px 5px !important; /* Boyuna küçült (Üst-Alt 2px) */
+            border-radius: 4px;
             border: 1px solid #4CAF50;
             text-align: center;
-            font-size: 13px; /* Yazı küçüldü */
+            font-size: 14px;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             margin-bottom: 2px;
-            white-space: nowrap; /* İsim tek satırda kalsın */
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex; /* İçeriği ortalamak için */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         /* Mevki yazısı */
         .position-label {
-            font-size: 9px; /* Çok küçük */
+            font-size: 8px; /* Çok küçük */
             color: #ffeb3b;
             text-transform: uppercase;
-            letter-spacing: 0px;
+            letter-spacing: 1px;
             margin-bottom: 0px;
             line-height: 1;
         }
         /* Saha Kutusu */
         .pitch-container {
             background-color: #2e7d32;
-            padding: 10px; /* Mobilde yer kaplamasın diye azaldı */
+            padding: 10px;
             border-radius: 10px;
             border: 2px solid white;
         }
-        /* Butonları küçült */
+        /* Butonları küçült ve genişlet */
         .stButton button {
-            width: 100%;
-            padding: 0px 5px;
-            font-size: 12px;
-            height: auto;
-            min-height: 0px;
-            line-height: 1.5;
+            width: 100% !important;
+            padding: 0px !important;
+            font-size: 11px !important;
+            min-height: 20px !important;
+            height: 25px !important;
+            line-height: 1 !important;
+            margin-top: 0px !important;
         }
         /* Selectbox daraltma */
         .stSelectbox div[data-baseweb="select"] > div {
             font-size: 12px;
-            min-height: 30px;
-            padding-top: 0px;
-            padding-bottom: 0px;
+            min-height: 28px;
+            padding: 0px 5px;
+        }
+        /* Selectbox ok işareti alanı */
+        .stSelectbox div[data-baseweb="select"] {
+            min-height: 28px;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -69,17 +78,24 @@ def get_db_connection():
 
 def save_vote_to_cloud(worst, best):
     conn = get_db_connection()
-    df = conn.read(worksheet="Oylar", usecols=[0, 1], ttl=0)
-    new_data = pd.DataFrame({"Best": [best], "Worst": [worst]})
-    updated_df = pd.concat([df, new_data], ignore_index=True)
-    conn.update(worksheet="Oylar", data=updated_df)
+    # Hata önleyici try-except eklendi
+    try:
+        df = conn.read(worksheet="Oylar", usecols=[0, 1], ttl=0)
+        new_data = pd.DataFrame({"Best": [best], "Worst": [worst]})
+        updated_df = pd.concat([df, new_data], ignore_index=True)
+        conn.update(worksheet="Oylar", data=updated_df)
+    except Exception as e:
+        st.error(f"Veritabanı hatası: {e}. Lütfen Secrets ayarlarını kontrol et.")
 
 def save_comment_to_cloud(comment):
     conn = get_db_connection()
-    df = conn.read(worksheet="Yorumlar", usecols=[0], ttl=0)
-    new_data = pd.DataFrame({"Yorum": [comment]})
-    updated_df = pd.concat([df, new_data], ignore_index=True)
-    conn.update(worksheet="Yorumlar", data=updated_df)
+    try:
+        df = conn.read(worksheet="Yorumlar", usecols=[0], ttl=0)
+        new_data = pd.DataFrame({"Yorum": [comment]})
+        updated_df = pd.concat([df, new_data], ignore_index=True)
+        conn.update(worksheet="Yorumlar", data=updated_df)
+    except Exception as e:
+        st.error(f"Yorum kaydedilemedi: {e}")
 
 def get_stats_from_cloud():
     conn = get_db_connection()
@@ -97,7 +113,8 @@ def get_comments_from_cloud():
 
 # --- RESİM OLUŞTURMA ---
 def create_pitch_image(formation_name, placement_dict):
-    fig, ax = plt.subplots(figsize=(8, 11))
+    fig, ax = plt.subplots(figsize=(8, 11))  # Resim boyutu
+
     ax.set_facecolor('#2e7d32')
     plt.plot([0, 100], [50, 50], color="white", linewidth=2)
     circle = plt.Circle((50, 50), 10, color="white", fill=False, linewidth=2)
