@@ -19,7 +19,9 @@ def show_stats():
             stats.append({"Oyuncu": p, "MVP": m, "Çöp": c, "Net Puan": m - c})
 
         df_final = pd.DataFrame(stats).sort_values("Net Puan", ascending=False)
-        st.dataframe(df_final, use_container_width=True)
+
+        # UYARI DUZELTME: 'use_container_width' yerine artık varsayılan ayarı kullanıyoruz.
+        st.dataframe(df_final)
     else:
         st.info("Henüz oy kullanılmamış veya bağlantı hatası.")
 
