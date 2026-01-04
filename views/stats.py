@@ -1,0 +1,30 @@
+import streamlit as st
+import pandas as pd
+import utils
+
+def show_stats():
+    st.header("Tüm Zamanlar (Bulut Verisi)")
+
+    df_votes = utils.get_stats_from_cloud()
+
+    if not df_votes.empty:
+        mvp_counts = df_votes["Best"].value_counts()
+        cop_counts = df_votes["Worst"].value_counts()
+
+        all_players = set(mvp_counts.index) | set(cop_counts.index)
+        stats = []
+        for p in all_players:
+            m = mvp_counts.get(p, 0)
+            c = cop_counts.get(p, 0)
+            stats.append({"Oyuncu": p, "MVP": m, "Çöp": c, "Net Puan": m - c})
+
+        df_final = pd.DataFrame(stats).sort_values("Net Puan", ascending=False)
+        st.dataframe(df_final, use_container_width=True)
+    else:
+        st.info("Henüz oy kullanılmamış veya bağlantı hatası.")
+
+    st.write("--- Son Yorumlar ---")
+    df_comments = utils.get_comments_from_cloud()
+    if not df_comments.empty:
+        for c in df_comments["Yorum"].tail(5).iloc[::-1]:
+            st.info(f"🗨️ {c}")
