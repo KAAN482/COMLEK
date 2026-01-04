@@ -16,11 +16,11 @@ def show_stats():
         for p in all_players:
             m = mvp_counts.get(p, 0)
             c = cop_counts.get(p, 0)
-            stats.append({"Oyuncu": p, "MVP": m, "Çöp": c, "Net Puan": m - c})
+            # Net puan hesaplaması kaldırıldı
+            stats.append({"Oyuncu": p, "MVP": m, "Çöp": c})
 
-        df_final = pd.DataFrame(stats).sort_values("Net Puan", ascending=False)
-
-        # UYARI DUZELTME: 'use_container_width' yerine artık varsayılan ayarı kullanıyoruz.
+        # Sıralamayı MVP sayısına göre yap (Çoktan aza)
+        df_final = pd.DataFrame(stats).sort_values("MVP", ascending=False)
         st.dataframe(df_final)
     else:
         st.info("Henüz oy kullanılmamış veya bağlantı hatası.")
