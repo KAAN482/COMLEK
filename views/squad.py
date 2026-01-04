@@ -23,14 +23,16 @@ def player_selector(label, key_name):
     else:
         st.markdown(f"**{label}**")
 
-        # --- FİLTRELEME MANTIĞI ---
+        # --- FİLTRELEME MANTIĞI (GÜNCELLENDİ) ---
         # Şu an başka kutularda seçili olan oyuncuları bul
         others_selected = []
         for k, v in st.session_state["squad_selections"].items():
-            if k != key_name and v != "Bot":
+            # Eğer seçili kişi 'Bot' VEYA 'Deneme' değilse listeye ekle (yani engelle)
+            # Böylece Bot ve Deneme her zaman serbest kalır.
+            if k != key_name and v not in ["Bot", "Deneme"]:
                 others_selected.append(v)
 
-        # Listeden bu oyuncuları çıkar (Bot her zaman kalır)
+        # Listeden bu oyuncuları çıkar
         available_options = [p for p in utils.SQUAD_LIST if p not in others_selected]
 
         selection = st.selectbox("Oyuncu:", available_options, key=f"sel_{key_name}", label_visibility="collapsed")
@@ -47,7 +49,7 @@ def show_squad():
 
     formation = st.selectbox("Diziliş:", ["4-3-3", "4-1-2-1-2 (Dar)", "3-5-2"])
 
-    # Diziliş değişirse seçimleri temizle (Çakışma olmasın diye)
+    # Diziliş değişirse seçimleri temizle
     if formation != st.session_state["formation"]:
          st.session_state["squad_selections"] = {}
          st.session_state["formation"] = formation
