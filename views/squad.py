@@ -5,8 +5,10 @@ def reset_selection(key):
     st.session_state["squad_selections"][key] = "Bot"
 
 def player_selector(label, key_name):
+    # Mevcut seçimi al
     current_val = st.session_state["squad_selections"].get(key_name, "Bot")
 
+    # 1. Eğer oyuncu seçilmişse (Bot değilse) -> KART GÖSTER
     if current_val != "Bot":
         st.markdown(f"""
         <div class='selected-player'>
@@ -14,10 +16,25 @@ def player_selector(label, key_name):
             {current_val}
         </div>
         """, unsafe_allow_html=True)
-        st.button("Değiştir", key=f"btn_{key_name}", on_click=reset_selection, args=(key_name,))
+        # Butona basınca bu anahtarı sıfırla
+        st.button("X", key=f"btn_{key_name}", on_click=reset_selection, args=(key_name,))
+
+    # 2. Seçim yapılmamışsa (Bot ise) -> SELECTBOX GÖSTER
     else:
         st.markdown(f"**{label}**")
-        selection = st.selectbox("Oyuncu:", utils.SQUAD_LIST, key=f"sel_{key_name}", label_visibility="collapsed")
+
+        # --- FİLTRELEME MANTIĞI ---
+        # Şu an başka kutularda seçili olan oyuncuları bul
+        others_selected = []
+        for k, v in st.session_state["squad_selections"].items():
+            if k != key_name and v != "Bot":
+                others_selected.append(v)
+
+        # Listeden bu oyuncuları çıkar (Bot her zaman kalır)
+        available_options = [p for p in utils.SQUAD_LIST if p not in others_selected]
+
+        selection = st.selectbox("Oyuncu:", available_options, key=f"sel_{key_name}", label_visibility="collapsed")
+
         if selection != "Bot":
             st.session_state["squad_selections"][key_name] = selection
             st.rerun()
@@ -29,7 +46,12 @@ def show_squad():
     if "squad_selections" not in st.session_state: st.session_state["squad_selections"] = {}
 
     formation = st.selectbox("Diziliş:", ["4-3-3", "4-1-2-1-2 (Dar)", "3-5-2"])
-    st.session_state["formation"] = formation
+
+    # Diziliş değişirse seçimleri temizle (Çakışma olmasın diye)
+    if formation != st.session_state["formation"]:
+         st.session_state["squad_selections"] = {}
+         st.session_state["formation"] = formation
+         st.rerun()
 
     st.markdown('<div class="pitch-container">', unsafe_allow_html=True)
 

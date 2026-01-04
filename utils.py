@@ -6,38 +6,59 @@ from io import BytesIO
 from streamlit_gsheets import GSheetsConnection
 
 # --- SABİTLER ---
-SQUAD_LIST = ["Bot", "Osman", "Gökmen", "Cankut", "Melo", "Ali", "Kaan", "Raşit", "Hakan", "Tolgahan", "Onur", "Emre", "Muho", "Bedo", "Efe"]
+SQUAD_LIST = ["Bot", "Osman", "Gökmen", "Cankut", "Melo", "Ali", "Kaan", "Raşit", "Hakan", "Tolgahan", "Onur", "Emre", "Muho", "Bedo", "Efe","Deneme"]
 
-# --- CSS STİLLERİ ---
+# --- CSS STİLLERİ (MOBİL İÇİN KÜÇÜLTÜLDÜ) ---
 def load_css():
     st.markdown("""
     <style>
+        /* Seçilen oyuncu kartı - Mobilde daha küçük */
         .selected-player {
             background-color: #1e1e1e;
             color: #ffffff;
-            padding: 8px;
-            border-radius: 8px;
-            border: 2px solid #4CAF50;
+            padding: 4px; /* Padding azaldı */
+            border-radius: 5px;
+            border: 1px solid #4CAF50;
             text-align: center;
-            font-size: 18px;
-            font-weight: 900;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            margin-bottom: 5px;
+            font-size: 13px; /* Yazı küçüldü */
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 2px;
+            white-space: nowrap; /* İsim tek satırda kalsın */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+        /* Mevki yazısı */
         .position-label {
-            font-size: 11px;
-            color: #cccccc;
+            font-size: 9px; /* Çok küçük */
+            color: #ffeb3b;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0px;
+            margin-bottom: 0px;
+            line-height: 1;
         }
+        /* Saha Kutusu */
         .pitch-container {
             background-color: #2e7d32;
-            padding: 20px;
-            border-radius: 15px;
-            border: 3px solid white;
+            padding: 10px; /* Mobilde yer kaplamasın diye azaldı */
+            border-radius: 10px;
+            border: 2px solid white;
         }
+        /* Butonları küçült */
         .stButton button {
             width: 100%;
+            padding: 0px 5px;
+            font-size: 12px;
+            height: auto;
+            min-height: 0px;
+            line-height: 1.5;
+        }
+        /* Selectbox daraltma */
+        .stSelectbox div[data-baseweb="select"] > div {
+            font-size: 12px;
+            min-height: 30px;
+            padding-top: 0px;
+            padding-bottom: 0px;
         }
     </style>
     """, unsafe_allow_html=True)

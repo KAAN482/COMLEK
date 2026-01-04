@@ -8,7 +8,7 @@ def show_home():
 
     # --- HABER 1 ---
     with col1:
-        st.subheader("Haftanın Olayı")
+
         # Kalın ve Büyük Yazı (Markdown)
         st.markdown("""
         ### **FARUK VE SEYİTHAN KOVULDU**
@@ -20,10 +20,10 @@ def show_home():
 
     # --- HABER 2 ---
     with col2:
-        st.subheader("Transfer Haberi")
+
         # Kalın ve Büyük Yazı (Markdown)
         st.markdown("""
-        ### **CANKUT TAKIMA KÜSTÜ MÜ?*
+        ### **CANKUT TAKIMA KÜSTÜ MÜ?**
         """)
 
         # 'use_container_width' parametresini sildik
